@@ -58,7 +58,7 @@ No hace falta un gimnasio. Dos sesiones de 15 minutos con ejercicios sencillos r
 
 Hazlas después de correr o en un día distinto. Si un ejercicio duele, no lo fuerces: cambia el rango o consúltalo.
 
-## Los tres errores que más veo
+## Los tres errores más comunes
 
 **1. Correr cada salida a tope.** La sensación de que "si no acabas ahogado, no cuenta" es el atajo más rápido a la lesión. La mayoría del volumen debe ser fácil.
 

@@ -19,20 +19,13 @@ const jsonLd = {
   '@type': 'Person',
   name: AUTOR.name,
   jobTitle: AUTOR.role,
-  description: AUTOR.bio,
   url: new URL(`/autor/${AUTOR.slug}/`, site).toString(),
-  email: AUTOR.email,
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: 'Madrid',
-    addressCountry: 'ES',
-  },
 };
 ---
 
 <BaseLayout
   title={`${AUTOR.name}, autor de Ruta y Ritmo`}
-  description={`Perfil de ${AUTOR.name}, editor de Ruta y Ritmo. Artículos de running, rutas y material.`}
+  description={`Artículos de ${AUTOR.name} en Ruta y Ritmo.`}
   jsonLd={[jsonLd]}
 >
   <div class="wrap page">
@@ -50,17 +43,7 @@ const jsonLd = {
         <span>{articulos.length} artículos publicados</span>
       </div>
       <h1>{AUTOR.name}</h1>
-      <p>{AUTOR.role}. {AUTOR.location}.</p>
     </header>
-
-    <div class="prose">
-      {AUTOR.longBio.map((paragraph) => <p>{paragraph}</p>)}
-      <p>
-        Puedes escribir a <a href={`mailto:${AUTOR.email}`}>{AUTOR.email}</a> o usar el
-        <a href="/contacto/">formulario de contacto</a>. Para saber cómo se trabaja en el
-        sitio, consulta la <a href="/politica-editorial/">política editorial</a>.
-      </p>
-    </div>
 
     <section class="section" aria-labelledby="articulos-autor">
       <div class="section-head">

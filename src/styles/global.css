@@ -137,8 +137,10 @@ svg {
 }
 
 .site-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   text-decoration: none;
-  padding-block: 4px;
   border-bottom: 2px solid transparent;
   transition: color 150ms ease, border-color 150ms ease;
 }
@@ -558,6 +560,20 @@ svg {
 
 .table-scroll {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.table-scroll:focus-visible {
+  outline: 2px solid var(--accent-deep);
+  outline-offset: 3px;
+}
+
+.table-hint {
+  display: none;
+  margin-bottom: 8px;
+  font-size: 0.78rem;
+  color: var(--muted);
 }
 
 .routes table {
@@ -729,90 +745,6 @@ svg {
   font-size: 0.72rem;
   color: rgba(232, 237, 240, 0.75);
   font-variant-numeric: tabular-nums;
-}
-
-/* ---------- Newsletter ---------- */
-
-.newsletter {
-  background: var(--primary);
-  color: var(--paper);
-  padding-block: clamp(56px, 8vw, 88px);
-}
-
-.newsletter__inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(32px, 6vw, 80px);
-  align-items: end;
-}
-
-.newsletter h2 {
-  font-family: var(--display);
-  font-weight: 400;
-  font-size: clamp(2.2rem, 4.4vw, 3.6rem);
-  line-height: 1;
-  max-width: 14ch;
-}
-
-.newsletter p {
-  margin-top: 18px;
-  max-width: 46ch;
-  color: rgba(232, 237, 240, 0.82);
-  font-size: 0.98rem;
-}
-
-.newsletter form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.newsletter label {
-  font-size: 0.8rem;
-  letter-spacing: 0.04em;
-  color: rgba(232, 237, 240, 0.85);
-}
-
-.newsletter__row {
-  display: flex;
-  gap: 0;
-}
-
-.newsletter input {
-  flex: 1;
-  min-width: 0;
-  font: inherit;
-  font-size: 0.98rem;
-  color: var(--paper);
-  background: transparent;
-  border: 2px solid var(--paper);
-  border-right: 0;
-  padding: 13px 16px;
-}
-
-.newsletter input::placeholder {
-  color: rgba(232, 237, 240, 0.72);
-}
-
-.newsletter button {
-  font: inherit;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--ink);
-  background: var(--paper);
-  border: 2px solid var(--paper);
-  padding: 13px 22px;
-  cursor: pointer;
-  transition: background 150ms ease;
-}
-
-.newsletter button:hover {
-  background: var(--paper-deep);
-}
-
-.newsletter__note {
-  font-size: 0.78rem;
-  color: rgba(232, 237, 240, 0.75);
 }
 
 /* ---------- Página genérica y prosa ---------- */
@@ -1220,16 +1152,6 @@ svg {
   line-height: 1.55;
 }
 
-.draft-note {
-  border: 1px solid var(--accent-deep);
-  border-left: 4px solid var(--accent-deep);
-  background: var(--paper-bright);
-  padding: 14px 18px;
-  margin-block: 28px;
-  font-size: 0.88rem;
-  line-height: 1.55;
-}
-
 .author-box {
   margin-top: 44px;
   border: 2px solid var(--ink);
@@ -1322,8 +1244,11 @@ svg {
 }
 
 .category-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   border: 1px solid var(--line-strong);
-  padding: 6px 12px;
+  padding: 8px 14px;
   font-size: 0.82rem;
   text-decoration: none;
   transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
@@ -1380,72 +1305,6 @@ svg {
 
 .pagination .disabled {
   color: var(--line-strong);
-}
-
-/* ---------- Formulario de contacto ---------- */
-
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  max-width: 620px;
-  margin-top: 8px;
-}
-
-.contact-form > label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.contact-form input,
-.contact-form textarea {
-  width: 100%;
-  font: inherit;
-  font-size: 1rem;
-  color: var(--ink);
-  background: var(--paper-bright);
-  border: 2px solid var(--ink);
-  padding: 12px 14px;
-}
-
-.contact-form textarea {
-  min-height: 180px;
-  resize: vertical;
-}
-
-.contact-form .checkbox {
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 0.86rem;
-  font-weight: 400;
-  line-height: 1.5;
-}
-
-.contact-form .checkbox input {
-  width: auto;
-  margin-top: 3px;
-}
-
-.contact-form button {
-  align-self: flex-start;
-  font: inherit;
-  font-size: 0.95rem;
-  font-weight: 600;
-  background: var(--ink);
-  color: var(--paper);
-  border: 2px solid var(--ink);
-  padding: 12px 22px;
-  cursor: pointer;
-  transition: background 150ms ease, border-color 150ms ease;
-}
-
-.contact-form button:hover {
-  background: var(--accent-deep);
-  border-color: var(--accent-deep);
 }
 
 /* ---------- Buscador ---------- */
@@ -1625,6 +1484,7 @@ html[data-consent="essential"] .ad {
   font: inherit;
   font-size: 0.84rem;
   font-weight: 600;
+  min-height: 44px;
   padding: 9px 16px;
   cursor: pointer;
   border: 2px solid var(--paper);
@@ -1857,10 +1717,6 @@ html[data-consent="essential"] .ad {
     grid-template-columns: 1fr 1fr;
   }
 
-  .newsletter__inner {
-    grid-template-columns: 1fr;
-  }
-
   .site-nav {
     gap: 20px;
   }
@@ -1938,14 +1794,6 @@ html[data-consent="essential"] .ad {
     grid-template-columns: 1fr 1fr;
   }
 
-  .newsletter__row {
-    flex-direction: column;
-  }
-
-  .newsletter input {
-    border-right: 2px solid var(--paper);
-  }
-
   .footer__grid {
     grid-template-columns: 1fr;
   }
@@ -1979,6 +1827,10 @@ html[data-consent="essential"] .ad {
     align-items: flex-start;
   }
 
+  .table-hint {
+    display: block;
+  }
+
   .prose {
     font-size: 1rem;
   }
@@ -1991,6 +1843,11 @@ html[data-consent="essential"] .ad {
 }
 
 @media (max-width: 460px) {
+  .site-nav {
+    gap: 10px;
+    font-size: 0.8rem;
+  }
+
   .bib {
     padding: 30px 20px 22px;
   }
@@ -2010,5 +1867,25 @@ html[data-consent="essential"] .ad {
 
   .route-fact:last-child {
     border-bottom: 0;
+  }
+
+  .cookie {
+    width: calc(100% - 16px);
+    bottom: 8px;
+    padding: 14px 16px;
+  }
+
+  .cookie p {
+    font-size: 0.78rem;
+  }
+
+  .cookie__actions {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .cookie button {
+    flex: 1;
+    min-height: 44px;
   }
 }

@@ -1,6 +1,6 @@
 ---
 title: "Zapatillas con 900 km: cuándo decir basta"
-description: "El kilometraje no es una fecha de caducidad. Estas son las señales que uso para jubilar una zapatilla sin adivinar."
+description: "El kilometraje no es una fecha de caducidad. Estas son las señales que importan para jubilar una zapatilla sin adivinar."
 category: "material"
 publishedAt: 2026-08-25
 updatedAt: 2026-10-10

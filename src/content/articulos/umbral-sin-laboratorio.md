@@ -41,7 +41,7 @@ Una sesión de umbral típica puede ser:
 
 La clave es acumular tiempo de calidad, no sumar series hasta que el cuerpo diga basta. Si la última serie sale mucho más lenta que la primera, has empezado demasiado rápido o la sesión era demasiado larga para tu momento actual.
 
-Una vez por semana es suficiente para la mayoría de corredores populares. El resto del volumen debe ser fácil, como explico en la guía de [zona 2](/diario/zona-2-correr-despacio/). Si añades dos sesiones de umbral y sigues haciendo los rodajes rápidos, no estás entrenando más: estás acumulando fatiga.
+Una vez por semana es suficiente para la mayoría de corredores populares. El resto del volumen debe ser fácil, como se explica en la guía de [zona 2](/diario/zona-2-correr-despacio/). Si añades dos sesiones de umbral y sigues haciendo los rodajes rápidos, no estás entrenando más: estás acumulando fatiga.
 
 ## Umbral no es lo mismo que series
 

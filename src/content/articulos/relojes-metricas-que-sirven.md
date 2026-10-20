@@ -15,7 +15,7 @@ Un reloj de running puede ser una herramienta estupenda o una máquina de genera
 
 > **En corto:** usa el reloj para medir tiempo, distancia, ritmo y, con cautela, pulso. Trata las estimaciones de VO2max, las calorías y las puntuaciones de recuperación como orientaciones, no como diagnósticos.
 
-## Las métricas que sí uso
+## Las métricas que sí importan
 
 **Tiempo y distancia.** Son la base de cualquier plan. Un GPS puede perder señal entre edificios o bajo los árboles; en recorridos con muchas curvas, la distancia se queda corta. No te obsesiones con el decimal.
 
@@ -25,7 +25,7 @@ Un reloj de running puede ser una herramienta estupenda o una máquina de genera
 
 **Cadencia.** No hay una cadencia mágica de 180 pasos por minuto. Es una referencia que puede ayudar a acortar la zancada y reducir el rebote, pero no es un objetivo universal. Si tu cadencia es baja y tienes molestias, coméntalo con un profesional.
 
-## Las que miro con desconfianza
+## Las que conviene mirar con desconfianza
 
 **VO2max estimado.** El reloj lo calcula a partir de pulso y ritmo, no de una prueba de laboratorio. Puede moverse por calor, fatiga o una salida cuesta abajo. Sirve como tendencia a largo plazo, no como nota del día.
 

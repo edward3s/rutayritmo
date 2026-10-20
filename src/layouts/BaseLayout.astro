@@ -110,5 +110,27 @@ const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT;
     </main>
     <Footer />
     <CookieBanner />
+    <script is:inline>
+      (() => {
+        document.querySelectorAll('.prose table').forEach((table) => {
+          if (table.closest('.table-scroll')) return;
+          const wrapper = document.createElement('div');
+          wrapper.className = 'table-scroll';
+          wrapper.tabIndex = 0;
+          wrapper.setAttribute('role', 'region');
+          wrapper.setAttribute(
+            'aria-label',
+            table.querySelector('caption')?.textContent?.trim() || 'Tabla de datos',
+          );
+          table.parentNode.insertBefore(wrapper, table);
+          wrapper.appendChild(table);
+
+          const hint = document.createElement('p');
+          hint.className = 'table-hint';
+          hint.textContent = 'Desliza para ver todas las columnas.';
+          wrapper.parentNode.insertBefore(hint, wrapper);
+        });
+      })();
+    </script>
   </body>
 </html>

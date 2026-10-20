@@ -1,6 +1,8 @@
 # Ruta y Ritmo
 
-Diario de running estático construido con Astro 7. Sin base de datos, sin CMS y sin framework de UI: Markdown, colecciones de contenido y HTML estático.
+Un blog de running: rutas, entrenamiento, material, nutrición, salud y carreras.
+
+Está construido con Astro 7 como sitio estático. No tiene backend ni base de datos: solo páginas HTML, CSS y JavaScript mínimo.
 
 ## Arrancar
 
@@ -9,35 +11,19 @@ npm install
 npm run dev      # http://localhost:4321
 npm run build    # genera dist/
 npm run preview  # sirve dist/
-npm run covers   # regenera las portadas vectoriales por artículo
 ```
-
-## Antes de publicar: lista de sustitución
-
-**Estado editorial:** los artículos son borradores de arranque, no reportajes ya verificados. Comprueba las fuentes, fechas y afirmaciones antes de publicarlos. Las fichas de ruta y sus perfiles/distancias son preliminares; no afirman que el autor haya recorrido esos tracks. Completa también el perfil y las credenciales de autoría.
-
-1. **Dominio**: `https://www.rutayritmo.site` es la URL canónica; `rutayritmo.site` redirige a `www`. Define `SITE_URL` en el hosting si cambias el dominio preferido.
-2. **Correo**: confirma que `hola@rutayritmo.com` existe y se monitoriza; actualiza `src/data/site.ts` si usarás otra dirección.
-3. **Autor**: edita `src/data/autor.ts` (nombre, bio, enlaces). No publiques credenciales que no sean reales.
-4. **Datos legales**: revisa `src/pages/aviso-legal.astro`, `privacidad.astro` y `cookies.astro` con tus datos fiscales y de contacto.
-5. **Rutas**: las cuatro fichas son contenido de muestra. Verifica distancias, desniveles, accesos y puntos de agua antes de publicarlas.
-6. **Cifras del hero**: el número de salidas y desnivel se calcula con el contenido; no hay estadísticas inventadas.
-7. **Boletín**: usa Netlify Forms por defecto. En otro hosting, cambia el `action` de `src/components/Newsletter.astro` por tu proveedor (Buttondown, Mailchimp, ConvertKit…).
-8. **Imagen social**: `public/og-default.png` se puede regenerar desde `public/og-default.svg`.
-
-
 
 ## Contenido
 
-- Artículos: `src/content/articulos/*.md` (frontmatter validado en `src/content.config.ts`).
+- Artículos: `src/content/articulos/*.md`.
 - Rutas: `src/content/rutas/*.md`.
-- Portadas SVG: `public/images/articles/*.svg` (generadas con `npm run covers`).
 - Categorías: `src/data/categorias.ts`.
-- Cada artículo declara `sources` y, si aplica, `medical: true`.
+- Datos del sitio: `src/data/site.ts`.
+- Autor: `src/data/autor.ts`.
+- Portadas de artículo: `public/images/articles/*.svg`.
+- Imágenes Open Graph: `public/images/og/*.png`.
 
-### Añadir un artículo
-
-Crea un `.md` en `src/content/articulos/` con:
+Para añadir un artículo, crea un `.md` en `src/content/articulos/` con el frontmatter que valida `src/content.config.ts`:
 
 ```yaml
 ---
@@ -53,33 +39,45 @@ sources:
 ---
 ```
 
-El slug es el nombre del archivo. Los enlaces internos deben terminar en `/` (por ejemplo, `/diario/zona-2-correr-despacio/`).
+El slug es el nombre del archivo. Los enlaces internos deben terminar en `/`, por ejemplo `/diario/zona-2-correr-despacio/`.
 
-## Redirecciones
+## Imágenes
 
-- Netlify: `public/_redirects`.
-- Vercel: `vercel.json`.
-- Ambas cubren `/blog/*`, `/posts/*`, `/articulos/*`, `/entrenamiento/*`, `/rss` y `/feed`.
+```bash
+npm run covers   # regenera las portadas SVG de los artículos
+npm run og       # genera las imágenes Open Graph PNG a partir de las portadas
+```
 
-Si cambias un slug, añade una redirección 301 en los dos archivos. No dejes URLs antiguas devolviendo 404.
+Las imágenes sociales de cada artículo se guardan en `public/images/og/<slug>.png`.
+
+## SEO
+
+- Sitemap: `/sitemap-index.xml`.
+- RSS: `/rss.xml`.
+- `robots.txt` generado desde `src/pages/robots.txt.ts`.
+- Canonical, Open Graph y JSON-LD en `src/layouts/BaseLayout.astro` y `src/layouts/ArticleLayout.astro`.
+- Redirecciones de Vercel en `vercel.json`.
 
 ## Despliegue
 
-### Netlify
+El proyecto se despliega en Vercel desde `edward3s/rutayritmo`.
 
-`netlify.toml` ya define build y publish. Conecta el repositorio y listo. Netlify Forms recogerá el boletín y el contacto.
+- Dominio: `https://www.rutayritmo.site`.
+- `rutayritmo.site` redirige a `www`.
+- Build: `npm run build`.
+- Salida: `dist/`.
 
-### Vercel
+No hay formularios de contacto ni newsletter. El sitio no recoge datos mediante formularios.
 
-Importa el proyecto. Vercel detecta Astro. `vercel.json` aplica redirecciones y cabeceras. Netlify Forms no funciona aquí: cambia el formulario por un proveedor externo.
+## Estructura
 
-### Cloudflare Pages
-
-Build: `npm run build`. Output: `dist`. Revisa que las redirecciones se configuren en el panel o en `_redirects` (Cloudflare soporta un subconjunto).
-
-## Notas de diseño
-
-- Tipografía: Anton (titulares) e Instrument Sans (texto).
-- Paleta: papel frío `#E8EDF0`, tinta `#0E1A20`, petróleo `#123F52`, naranja de señalización `#F05A28`.
-- Sin fotos de stock: la ilustración es SVG generado por categoría y por perfil de ruta.
-- El movimiento se limita a la carga del hero y los estados de interacción; respeta `prefers-reduced-motion`.
+```text
+src/
+├── components/   Componentes de interfaz
+├── content/      Artículos y rutas en Markdown
+├── data/         Datos del sitio, categorías y autor
+├── layouts/      Layouts base, de página y de artículo
+├── lib/          Utilidades
+├── pages/        Rutas de Astro
+└── styles/       CSS global
+```

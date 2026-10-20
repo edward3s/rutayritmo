@@ -3,7 +3,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import RouteProfile from '../../components/RouteProfile.astro';
 import AdSlot from '../../components/AdSlot.astro';
-import Newsletter from '../../components/Newsletter.astro';
 import { getCollection } from 'astro:content';
 import { SITE } from '../../data/site';
 import { sortByDate } from '../../lib/utils';
@@ -46,8 +45,8 @@ const jsonLd = {
     <header class="page__header">
       <h1>Rutas de Madrid</h1>
       <p>
-        Fichas preliminares por la sierra y Madrid Río. Los tracks, desniveles y puntos de
-        agua aún deben verificarse antes de usar o publicar estas rutas.
+        Rutas por la sierra de Madrid y Madrid Río, con distancia, desnivel, terreno y
+        punto de salida.
       </p>
     </header>
 
@@ -73,17 +72,6 @@ const jsonLd = {
       ))}
     </div>
 
-    <aside class="draft-note">
-      <strong>Importante:</strong> estas fichas son borradores editoriales, no rutas
-      verificadas en terreno. Confirma el recorrido, el acceso, el estado de los caminos
-      y el agua disponible con fuentes locales antes de salir.
-    </aside>
-
     <AdSlot />
   </div>
-
-  <Newsletter
-    title="Una ruta nueva cada dos domingos."
-    description="Si pruebas alguna de estas rutas, cuéntame cómo fue. El boletín también sirve para avisar de cambios de recorrido."
-  />
 </BaseLayout>

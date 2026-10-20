@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import AdSlot from '../components/AdSlot.astro';
-import Newsletter from '../components/Newsletter.astro';
 import { getCollection } from 'astro:content';
 import { CATEGORIAS } from '../data/categorias';
 import { SITE } from '../data/site';
@@ -36,7 +35,6 @@ const jsonLd = [
     '@type': 'Organization',
     name: SITE.name,
     url: site.toString(),
-    email: SITE.email,
     description: SITE.description,
   },
 ];
@@ -108,7 +106,7 @@ const jsonLd = [
 
     <div class="start-strip" aria-label="Guías para empezar">
       <a class="start-strip__item" href="/diario/empezar-a-correr-en-8-semanas/">
-        <strong>Nunca he corrido</strong>
+        <strong>Primeros pasos</strong>
         <span>El plan de ocho semanas que sí se puede seguir.</span>
       </a>
       <a class="start-strip__item" href="/diario/zapatillas-900-kilometros/">
@@ -140,9 +138,10 @@ const jsonLd = [
         <a class="section-link" href="/rutas/">Ver las cuatro fichas</a>
       </div>
 
+      <p class="table-hint">Desliza para ver todas las columnas.</p>
       <div class="table-scroll">
         <table>
-          <caption>Fichas preliminares: confirma recorrido, distancia y accesos antes de salir.</caption>
+          <caption>Distancias y desniveles de las rutas.</caption>
           <thead>
             <tr>
               <th scope="col">Ruta</th>
@@ -167,6 +166,4 @@ const jsonLd = [
       </div>
     </div>
   </section>
-
-  <Newsletter />
 </BaseLayout>

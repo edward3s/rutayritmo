@@ -6,8 +6,6 @@ export const SITE = {
   url: 'https://www.rutayritmo.site',
   locale: 'es_ES',
   language: 'es',
-  email: 'hola@rutayritmo.com',
-  location: 'Madrid, España',
   issue: 'Nº 08 / Otoño 2026',
   since: 2026,
 } as const;
