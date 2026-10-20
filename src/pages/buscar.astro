@@ -41,8 +41,8 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 
     <noscript>
       <p class="search__status">
-        El buscador necesita JavaScript. Puedes recorrer el
-        <a href="/diario/">archivo completo</a> o las
+        El buscador necesita JavaScript. Puedes recorrer el{' '}
+        <a href="/diario/">archivo completo</a> o las{' '}
         <a href="/rutas/">fichas de ruta</a>.
       </p>
     </noscript>
@@ -138,6 +138,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
         const query = input.value.trim();
         const url = query ? `/buscar/?q=${encodeURIComponent(query)}` : '/buscar/';
         window.history.replaceState({}, '', url);
+        window.dispatchEvent(new Event('rutayritmo:search'));
         render();
         input.focus();
       });

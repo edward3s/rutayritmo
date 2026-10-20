@@ -55,8 +55,8 @@ const s = {
 
     <noscript>
       <p class="search__status">
-        {t(lang, 'searchNoJs')}
-        <a href="/en/diario/">{t(lang, 'searchArchive')}</a> or the
+        {t(lang, 'searchNoJs')}{' '}
+        <a href="/en/diario/">{t(lang, 'searchArchive')}</a> or the{' '}
         <a href="/en/rutas/">{t(lang, 'searchRoutes')}</a>.
       </p>
     </noscript>
@@ -150,6 +150,7 @@ const s = {
         const query = input.value.trim();
         const url = query ? `/en/buscar/?q=${encodeURIComponent(query)}` : '/en/buscar/';
         window.history.replaceState({}, '', url);
+        window.dispatchEvent(new Event('rutayritmo:search'));
         render();
         input.focus();
       });

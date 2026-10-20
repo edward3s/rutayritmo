@@ -10,7 +10,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "covers": "node scripts/generate-article-covers.mjs && node scripts/generate-en-assets.mjs",
-    "og": "node scripts/generate-og.mjs && node scripts/generate-en-assets.mjs",
+    "og": "node scripts/generate-og.mjs && node scripts/generate-en-assets.mjs && node scripts/generate-default-og.mjs",
+    "og-default": "node scripts/generate-default-og.mjs",
     "en-assets": "node scripts/generate-en-assets.mjs"
   },
   "engines": {

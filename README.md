@@ -27,6 +27,7 @@ npm run preview  # sirve dist/
 - Portadas en inglés: `public/images/articles/en/*.svg`.
 - Imágenes Open Graph: `public/images/og/*.png`.
 - Imágenes Open Graph en inglés: `public/images/og/en/*.png`.
+- Tarjetas sociales generales: `public/og-default.png` y `public/og-default-en.png`.
 
 Para añadir un artículo, crea un `.md` en `src/content/articulos/` y su versión inglesa en `src/content/articulos-en/` con el mismo nombre de archivo. El frontmatter que valida `src/content.config.ts` es:
 
@@ -57,9 +58,10 @@ El slug es el nombre del archivo. Los enlaces internos en español deben termina
 ## Imágenes
 
 ```bash
-npm run covers     # regenera las portadas SVG en español e inglés
-npm run og         # genera las imágenes Open Graph en español e inglés
-npm run en-assets  # regenera solo portadas y OG inglesas
+npm run covers      # regenera las portadas SVG en español e inglés
+npm run og          # genera las imágenes Open Graph en español e inglés
+npm run og-default  # regenera las tarjetas sociales generales
+npm run en-assets   # regenera solo portadas y OG inglesas
 ```
 
 Las imágenes sociales de cada artículo se guardan en `public/images/og/<slug>.png` y `public/images/og/en/<slug>.png`.

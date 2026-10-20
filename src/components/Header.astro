@@ -51,3 +51,20 @@ const issue = lang === 'en' ? 'No. 08 / Autumn 2026' : SITE.issue;
 
   <p class="issue">{issue}</p>
 </header>
+
+<script is:inline>
+  (() => {
+    const link = document.querySelector('.lang-switch');
+    if (!link) return;
+
+    const sync = () => {
+      const target = new URL(link.getAttribute('href'), window.location.origin);
+      target.search = window.location.search;
+      link.setAttribute('href', `${target.pathname}${target.search}`);
+    };
+
+    sync();
+    window.addEventListener('popstate', sync);
+    window.addEventListener('rutayritmo:search', sync);
+  })();
+</script>

@@ -24,6 +24,7 @@ const labels = {
   UMBRAL: 'THRESHOLD',
   DESGASTE: 'WEAR',
   'ZONA AERÓBICA': 'AEROBIC ZONE',
+  CONTROLADO: 'CONTROLLED',
 };
 
 const categories = {
@@ -65,16 +66,16 @@ for (const file of files) {
     svg = svg.replaceAll(`>${from}<`, `>${to}<`);
   }
 
-  const titleMatch = svg.match(/<title>(.*?) — Ruta y Ritmo<\/title>/);
+  const titleMatch = svg.match(/<title[^>]*>(.*?) — Ruta y Ritmo<\/title>/);
   const spanishTitle = titleMatch?.[1] ?? '';
   const englishTitle = titleLabels[spanishTitle] ?? spanishTitle;
   svg = svg.replace(
-    /<title>.*?<\/title>/,
-    `<title>${englishTitle} — Ruta y Ritmo</title>`,
+    /<title[^>]*>.*?<\/title>/,
+    `<title id="title">${englishTitle} — Ruta y Ritmo</title>`,
   );
   svg = svg.replace(
-    /<desc>.*?<\/desc>/,
-    `<desc>Editorial vector illustration about ${englishTitle.toLowerCase()} in running.</desc>`,
+    /<desc[^>]*>.*?<\/desc>/,
+    `<desc id="desc">Editorial vector illustration about ${englishTitle.toLowerCase()} in running.</desc>`,
   );
 
   await writeFile(new URL(file, coverOutput), svg);

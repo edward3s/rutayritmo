@@ -25,10 +25,12 @@ interface Props {
   jsonLd?: Record<string, unknown>[];
 }
 
+const lang = getLangFromPath(Astro.url.pathname);
+
 const {
-  title = SITE.title,
-  description = SITE.description,
-  image = '/og-default.png',
+  title = lang === 'en' ? SITE.titleEn : SITE.title,
+  description = lang === 'en' ? SITE.descriptionEn : SITE.description,
+  image = lang === 'en' ? '/og-default-en.png' : '/og-default.png',
   type = 'website',
   noindex = false,
   publishedTime,
@@ -36,8 +38,6 @@ const {
   section,
   jsonLd = [],
 } = Astro.props;
-
-const lang = getLangFromPath(Astro.url.pathname);
 const site = Astro.site ?? new URL(SITE.url);
 const canonical = new URL(Astro.url.pathname, site);
 const imageUrl = new URL(image, site);
