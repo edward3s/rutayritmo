@@ -12,7 +12,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       window.location.pathname === '/en' ||
       window.location.pathname.startsWith('/en/')
     ) {
-      window.location.replace(`/en/404/${window.location.search}`);
+      window.location.replace(
+        `/en/404/${window.location.search}${window.location.hash}`,
+      );
     }
   </script>
 
