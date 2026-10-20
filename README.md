@@ -16,7 +16,7 @@ npm run covers   # regenera las portadas vectoriales por artículo
 
 **Estado editorial:** los artículos son borradores de arranque, no reportajes ya verificados. Comprueba las fuentes, fechas y afirmaciones antes de publicarlos. Las fichas de ruta y sus perfiles/distancias son preliminares; no afirman que el autor haya recorrido esos tracks. Completa también el perfil y las credenciales de autoría.
 
-1. **Dominio**: cambia `SITE_URL` en `astro.config.mjs` o define la variable de entorno `SITE_URL` en el hosting. Ahora mismo es `https://rutayritmo.com`.
+1. **Dominio**: `https://www.rutayritmo.site` es la URL canónica; `rutayritmo.site` redirige a `www`. Define `SITE_URL` en el hosting si cambias el dominio preferido.
 2. **Correo**: confirma que `hola@rutayritmo.com` existe y se monitoriza; actualiza `src/data/site.ts` si usarás otra dirección.
 3. **Autor**: edita `src/data/autor.ts` (nombre, bio, enlaces). No publiques credenciales que no sean reales.
 4. **Datos legales**: revisa `src/pages/aviso-legal.astro`, `privacidad.astro` y `cookies.astro` con tus datos fiscales y de contacto.

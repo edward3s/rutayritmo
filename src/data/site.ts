@@ -3,7 +3,7 @@ export const SITE = {
   title: 'Ruta y Ritmo — Diario de running',
   description:
     'Rutas, entrenamiento y material para corredores populares. Ideas prácticas, fuentes a la vista y ningún plan milagro.',
-  url: 'https://rutayritmo.com',
+  url: 'https://www.rutayritmo.site',
   locale: 'es_ES',
   language: 'es',
   email: 'hola@rutayritmo.com',
