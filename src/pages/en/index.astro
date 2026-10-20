@@ -1,0 +1,171 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { getCollection } from 'astro:content';
+import { getCategoria } from '../../data/categorias';
+import { SITE } from '../../data/site';
+import { readingTime, sortByDate } from '../../lib/utils';
+import { difficultyLabel, t } from '../../i18n/ui';
+
+const lang = 'en' as const;
+const articulos = sortByDate(await getCollection('articulosEn'));
+const rutas = sortByDate(await getCollection('rutasEn'));
+
+const destacado = articulos.find((entry) => entry.data.featured) ?? articulos[0];
+const ultimos = articulos.filter((entry) => entry.id !== destacado.id).slice(0, 6);
+const site = Astro.site ?? new URL(SITE.url);
+const categoriaDestacada = getCategoria(destacado.data.category, lang);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE.name,
+    url: new URL('/en/', site).toString(),
+    description: t(lang, 'homeLede'),
+    inLanguage: 'en-US',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${new URL('/en/buscar/', site).toString()}?q={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: SITE.name,
+    url: site.toString(),
+    description: t(lang, 'homeLede'),
+  },
+];
+---
+
+<BaseLayout
+  title="Ruta y Ritmo — Running journal"
+  description={t(lang, 'homeLede')}
+  jsonLd={jsonLd}
+>
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <div>
+      <h1 id="hero-title">{t(lang, 'homeTitle')}</h1>
+      <p class="hero__lede">{t(lang, 'homeLede')}</p>
+      <div class="hero__actions">
+        <a class="button" href="/en/diario/">{t(lang, 'readDiary')}</a>
+        <a class="text-link" href="/en/rutas/">{t(lang, 'seeRoutes')}</a>
+      </div>
+      <p class="hero__note">
+        {articulos.length} {t(lang, 'homeNote')} {rutas.length} {t(lang, 'homeNoteRoutes')}
+      </p>
+    </div>
+
+    <figure class="bib" aria-label="Ruta y Ritmo race bib, number 042">
+      <span class="bib__pin bib__pin--left" aria-hidden="true"></span>
+      <span class="bib__pin bib__pin--right" aria-hidden="true"></span>
+      <p class="bib__series">{t(lang, 'runningDiary')}</p>
+      <p class="bib__number">042</p>
+      <p class="bib__name">RUTA Y RITMO</p>
+      <div class="bib__meta">
+        <span>No. 08</span>
+        <span>Autumn 2026</span>
+      </div>
+      <div class="bib__barcode" aria-hidden="true"></div>
+    </figure>
+  </section>
+
+  <section class="section wrap" aria-labelledby="destacado-title">
+    <div class="section-head">
+      <h2 id="destacado-title">{t(lang, 'startHere')}</h2>
+      <a class="section-link" href="/en/diario/">{t(lang, 'seeAllArticles')}</a>
+    </div>
+
+    <article class="feature">
+      <div class="feature__art" aria-hidden="true">
+        <img
+          src={`/images/articles/en/${destacado.id}.svg`}
+          width="1200"
+          height="675"
+          fetchpriority="high"
+          alt=""
+        />
+      </div>
+      <div class="feature__body">
+        <p class="meta">
+          <a
+            class="category-tag"
+            href={`/en/diario/categoria/${categoriaDestacada.slug}/`}
+            style={`--cat:${categoriaDestacada.tone}`}
+          >{categoriaDestacada.name}</a>
+          <span>{readingTime(destacado.body)} {t(lang, 'readMinutes')}</span>
+        </p>
+        <h3><a href={`/en/diario/${destacado.id}/`}>{destacado.data.title}</a></h3>
+        <p>{destacado.data.description}</p>
+        <a class="text-link" href={`/en/diario/${destacado.id}/`}>{t(lang, 'readEntry')}</a>
+      </div>
+    </article>
+
+    <AdSlot />
+
+    <div class="start-strip" aria-label={t(lang, 'startGuides')}>
+      <a class="start-strip__item" href="/en/diario/empezar-a-correr-en-8-semanas/">
+        <strong>{t(lang, 'firstSteps')}</strong>
+        <span>{t(lang, 'firstStepsBody')}</span>
+      </a>
+      <a class="start-strip__item" href="/en/diario/zapatillas-900-kilometros/">
+        <strong>{t(lang, 'shoesTitle')}</strong>
+        <span>{t(lang, 'shoesBody')}</span>
+      </a>
+      <a class="start-strip__item" href="/en/diario/primera-media-maraton/">
+        <strong>{t(lang, 'halfTitle')}</strong>
+        <span>{t(lang, 'halfBody')}</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="ultimos-title">
+    <div class="section-head">
+      <h2 id="ultimos-title">{t(lang, 'latest')}</h2>
+      <p>{t(lang, 'latestBody')}</p>
+    </div>
+
+    <div class="card-grid">
+      {ultimos.map((entry) => <ArticleCard entry={entry} />)}
+    </div>
+  </section>
+
+  <section class="section routes" id="rutas" aria-labelledby="rutas-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="rutas-title">{t(lang, 'madridRoutes')}</h2>
+        <a class="section-link" href="/en/rutas/">{t(lang, 'seeRouteSheets')}</a>
+      </div>
+
+      <p class="table-hint">{t(lang, 'tableHint')}</p>
+      <div class="table-scroll">
+        <table>
+          <caption>{t(lang, 'routeTableCaption')}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{t(lang, 'tableRoute')}</th>
+              <th scope="col" class="num">{t(lang, 'tableDistance')}</th>
+              <th scope="col" class="num">{t(lang, 'tableElevation')}</th>
+              <th scope="col">{t(lang, 'tableTerrain')}</th>
+              <th scope="col">{t(lang, 'tableDifficulty')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rutas.map((ruta) => (
+              <tr>
+                <td><a class="route-name" href={`/en/rutas/${ruta.id}/`}>{ruta.data.title}</a></td>
+                <td class="num">{ruta.data.distanceKm} km</td>
+                <td class="num">+{ruta.data.elevationGain} m</td>
+                <td>{ruta.data.terrain}</td>
+                <td>{difficultyLabel(lang, ruta.data.difficulty)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

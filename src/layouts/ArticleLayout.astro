@@ -4,10 +4,11 @@ import BaseLayout from './BaseLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import AdSlot from '../components/AdSlot.astro';
-import { CATEGORIAS } from '../data/categorias';
+import { getCategoria } from '../data/categorias';
 import { AUTOR } from '../data/autor';
 import { SITE } from '../data/site';
 import { formatDate, readingTime } from '../lib/utils';
+import { getLangFromPath, localizedPath, t } from '../i18n/ui';
 
 interface Heading {
   depth: number;
@@ -15,21 +16,29 @@ interface Heading {
   text: string;
 }
 
+type ArticleEntry = CollectionEntry<'articulos'> | CollectionEntry<'articulosEn'>;
+
 interface Props {
-  entry: CollectionEntry<'articulos'>;
+  entry: ArticleEntry;
   headings: Heading[];
-  related: CollectionEntry<'articulos'>[];
+  related: ArticleEntry[];
 }
 
 const { entry, headings, related } = Astro.props;
-const categoria = CATEGORIAS[entry.data.category];
-const url = `/diario/${entry.id}/`;
+const lang = getLangFromPath(Astro.url.pathname);
+const categoria = getCategoria(entry.data.category, lang);
+const url = localizedPath(lang, `/diario/${entry.id}/`);
 const minutes = readingTime(entry.body);
 const updated = entry.data.updatedAt ?? entry.data.publishedAt;
 
 const site = Astro.site ?? new URL(SITE.url);
 const canonical = new URL(url, site).toString();
-const image = new URL(`/images/og/${entry.id}.png`, site).toString();
+const image = new URL(
+  lang === 'en' ? `/images/og/en/${entry.id}.png` : `/images/og/${entry.id}.png`,
+  site,
+).toString();
+const artPath =
+  lang === 'en' ? `/images/articles/en/${entry.id}.svg` : `/images/articles/${entry.id}.svg`;
 
 const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 
@@ -43,7 +52,7 @@ const blogPosting = {
   author: {
     '@type': 'Person',
     name: AUTOR.name,
-    url: new URL(`/autor/${AUTOR.slug}/`, site).toString(),
+    url: new URL(localizedPath(lang, `/autor/${AUTOR.slug}/`), site).toString(),
   },
   publisher: {
     '@type': 'Organization',
@@ -56,7 +65,7 @@ const blogPosting = {
   },
   image: [image],
   articleSection: categoria.name,
-  inLanguage: 'es-ES',
+  inLanguage: lang === 'en' ? 'en-US' : 'es-ES',
   isAccessibleForFree: true,
 };
 
@@ -67,20 +76,20 @@ const breadcrumbs = {
     {
       '@type': 'ListItem',
       position: 1,
-      name: 'Inicio',
-      item: site.toString(),
+      name: t(lang, 'home'),
+      item: new URL(localizedPath(lang, '/'), site).toString(),
     },
     {
       '@type': 'ListItem',
       position: 2,
-      name: 'Diario',
-      item: new URL('/diario/', site).toString(),
+      name: t(lang, 'diaryTitle'),
+      item: new URL(localizedPath(lang, '/diario/'), site).toString(),
     },
     {
       '@type': 'ListItem',
       position: 3,
       name: categoria.name,
-      item: new URL(`/diario/categoria/${categoria.slug}/`, site).toString(),
+      item: new URL(localizedPath(lang, `/diario/categoria/${categoria.slug}/`), site).toString(),
     },
     {
       '@type': 'ListItem',
@@ -105,9 +114,12 @@ const breadcrumbs = {
   <div class="wrap">
     <Breadcrumbs
       items={[
-        { label: 'Inicio', href: '/' },
-        { label: 'Diario', href: '/diario/' },
-        { label: categoria.name, href: `/diario/categoria/${categoria.slug}/` },
+        { label: t(lang, 'home'), href: localizedPath(lang, '/') },
+        { label: t(lang, 'diaryTitle'), href: localizedPath(lang, '/diario/') },
+        {
+          label: categoria.name,
+          href: localizedPath(lang, `/diario/categoria/${categoria.slug}/`),
+        },
         { label: entry.data.title },
       ]}
     />
@@ -116,29 +128,29 @@ const breadcrumbs = {
       <div class="article-kicker">
         <a
           class="category-tag"
-          href={`/diario/categoria/${categoria.slug}/`}
+          href={localizedPath(lang, `/diario/categoria/${categoria.slug}/`)}
           style={`--cat:${categoria.tone}`}
         >{categoria.name}</a>
-        <span>{minutes} min de lectura</span>
+        <span>{minutes} {t(lang, 'readMinutes')}</span>
       </div>
 
       <h1 class="article-title">{entry.data.title}</h1>
       <p class="article-dek">{entry.data.description}</p>
 
       <div class="article-byline">
-        <span>Por <a href={`/autor/${AUTOR.slug}/`}>{AUTOR.name}</a></span>
+        <span>{t(lang, 'by')} <a href={localizedPath(lang, `/autor/${AUTOR.slug}/`)}>{AUTOR.name}</a></span>
         <time datetime={entry.data.publishedAt.toISOString()}>
-          {formatDate(entry.data.publishedAt, 'long')}
+          {formatDate(entry.data.publishedAt, 'long', lang)}
         </time>
         {entry.data.updatedAt && (
-          <span>Actualizado el {formatDate(entry.data.updatedAt, 'long')}</span>
+          <span>{t(lang, 'updatedOn')} {formatDate(entry.data.updatedAt, 'long', lang)}</span>
         )}
       </div>
     </header>
 
     <div class="article-art" aria-hidden="true">
       <img
-        src={`/images/articles/${entry.id}.svg`}
+        src={artPath}
         width="1200"
         height="675"
         fetchpriority="high"
@@ -151,8 +163,8 @@ const breadcrumbs = {
     <div class="article-layout">
       <aside class="article-aside">
         {toc.length > 1 && (
-          <nav class="toc" aria-label="En este artículo">
-            <p class="toc__title">En este artículo</p>
+          <nav class="toc" aria-label={t(lang, 'inThisArticle')}>
+            <p class="toc__title">{t(lang, 'inThisArticle')}</p>
             <ol>
               {toc.map((heading) => (
                 <li data-depth={heading.depth}>
@@ -166,8 +178,8 @@ const breadcrumbs = {
         <div class="author-mini">
           <span class="avatar" aria-hidden="true">{AUTOR.name.slice(0, 1)}</span>
           <div>
-            <p class="author-mini__name"><a href={`/autor/${AUTOR.slug}/`}>{AUTOR.name}</a></p>
-            <p class="author-mini__role">{AUTOR.role}</p>
+            <p class="author-mini__name"><a href={localizedPath(lang, `/autor/${AUTOR.slug}/`)}>{AUTOR.name}</a></p>
+            <p class="author-mini__role">{t(lang, 'author')}</p>
           </div>
         </div>
       </aside>
@@ -179,16 +191,13 @@ const breadcrumbs = {
 
         {entry.data.medical && (
           <aside class="medical-note">
-            <strong>Esto no es consejo médico.</strong> Si el dolor es fuerte, persiste más de
-            una semana o aparecen síntomas nuevos, para y consulta a un fisioterapeuta o a tu
-            médico. La información de este artículo es general y no sustituye una valoración
-            individual.
+            <strong>{t(lang, 'medicalTitle')}</strong> {t(lang, 'medicalBody')}
           </aside>
         )}
 
         {entry.data.sources.length > 0 && (
           <section class="sources" aria-labelledby="fuentes-title">
-            <h2 id="fuentes-title">Fuentes consultadas</h2>
+            <h2 id="fuentes-title">{t(lang, 'sources')}</h2>
             <ul>
               {entry.data.sources.map((source) => (
                 <li>
@@ -205,8 +214,8 @@ const breadcrumbs = {
           <span class="avatar" aria-hidden="true">{AUTOR.name.slice(0, 1)}</span>
           <div>
             <h2>{AUTOR.name}</h2>
-            <p>Artículos publicados en Ruta y Ritmo.</p>
-            <a href={`/autor/${AUTOR.slug}/`}>Ver todos los artículos del autor</a>
+            <p>{t(lang, 'authorBoxBody')}</p>
+            <a href={localizedPath(lang, `/autor/${AUTOR.slug}/`)}>{t(lang, 'authorBoxLink')}</a>
           </div>
         </div>
 
@@ -217,7 +226,7 @@ const breadcrumbs = {
 
   {related.length > 0 && (
     <section class="wrap related" aria-labelledby="relacionados-title">
-      <h2 id="relacionados-title">Sigue leyendo</h2>
+      <h2 id="relacionados-title">{t(lang, 'related')}</h2>
       <div class="card-grid">
         {related.map((item) => <ArticleCard entry={item} />)}
       </div>

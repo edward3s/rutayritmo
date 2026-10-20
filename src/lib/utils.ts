@@ -8,12 +8,18 @@ export function readingTime(body: string | undefined, wordsPerMinute = 220): num
   return Math.max(2, Math.round(words / wordsPerMinute));
 }
 
-export function formatDate(date: Date, style: 'short' | 'long' = 'short'): string {
+import type { Lang } from '../i18n/ui';
+
+export function formatDate(
+  date: Date,
+  style: 'short' | 'long' = 'short',
+  lang: Lang = 'es',
+): string {
   const options: Intl.DateTimeFormatOptions =
     style === 'long'
       ? { day: 'numeric', month: 'long', year: 'numeric' }
       : { day: 'numeric', month: 'short', year: 'numeric' };
-  return new Intl.DateTimeFormat('es-ES', options).format(date);
+  return new Intl.DateTimeFormat(lang === 'en' ? 'en-US' : 'es-ES', options).format(date);
 }
 
 export function isoDate(date: Date): string {

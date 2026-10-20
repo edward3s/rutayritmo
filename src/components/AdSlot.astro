@@ -1,10 +1,13 @@
 ---
+import { getLangFromPath, t } from '../i18n/ui';
+
 const client = import.meta.env.PUBLIC_ADSENSE_CLIENT;
 const slot = import.meta.env.PUBLIC_ADSENSE_SLOT;
+const lang = getLangFromPath(Astro.url.pathname);
 ---
 
-<aside class="ad" aria-label="Publicidad">
-  <p class="ad__label">Publicidad</p>
+<aside class="ad" aria-label={t(lang, 'advertising')}>
+  <p class="ad__label">{t(lang, 'advertising')}</p>
 
   {client && slot ? (
     <>
@@ -22,7 +25,7 @@ const slot = import.meta.env.PUBLIC_ADSENSE_SLOT;
     </>
   ) : (
     <div class="ad__box">
-      <p class="ad__placeholder">Espacio reservado para publicidad.</p>
+      <p class="ad__placeholder">{t(lang, 'adPlaceholder')}</p>
     </div>
   )}
 </aside>

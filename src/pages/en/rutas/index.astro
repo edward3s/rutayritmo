@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import RouteProfile from '../../../components/RouteProfile.astro';
+import AdSlot from '../../../components/AdSlot.astro';
+import { getCollection } from 'astro:content';
+import { SITE } from '../../../data/site';
+import { sortByDate } from '../../../lib/utils';
+import { difficultyLabel, t } from '../../../i18n/ui';
+
+const lang = 'en' as const;
+const rutas = sortByDate(await getCollection('rutasEn'));
+const site = Astro.site ?? new URL(SITE.url);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Madrid running routes — Ruta y Ritmo',
+  description:
+    'Four running routes through the Madrid mountains and the Manzanares, with distance, elevation gain and water points.',
+  inLanguage: 'en-US',
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: rutas.map((ruta, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      url: new URL(`/en/rutas/${ruta.id}/`, site).toString(),
+      name: ruta.data.title,
+    })),
+  },
+};
+---
+
+<BaseLayout
+  title="Madrid running routes"
+  description="Four routes to run in the Madrid mountains and along the Manzanares: distance, elevation gain, terrain and water points."
+  jsonLd={[jsonLd]}
+>
+  <div class="wrap page">
+    <Breadcrumbs
+      items={[
+        { label: t(lang, 'home'), href: '/en/' },
+        { label: t(lang, 'routeSection') },
+      ]}
+    />
+
+    <header class="page__header">
+      <h1>{t(lang, 'madridRoutes')}</h1>
+      <p>
+        Routes through the Madrid mountains and Madrid Río, with distance, elevation
+        gain, terrain and starting point.
+      </p>
+    </header>
+
+    <div class="route-grid">
+      {rutas.map((ruta) => (
+        <article class="route-card">
+          <div class="route-card__art" aria-hidden="true">
+            <RouteProfile profile={ruta.data.profile} />
+          </div>
+          <p class="meta">
+            <span>{difficultyLabel(lang, ruta.data.difficulty)}</span>
+            <span>{ruta.data.duration}</span>
+          </p>
+          <h2><a href={`/en/rutas/${ruta.id}/`}>{ruta.data.title}</a></h2>
+          <p>{ruta.data.description}</p>
+          <div class="route-card__facts">
+            <span>{ruta.data.distanceKm} km</span>
+            <span>+{ruta.data.elevationGain} m</span>
+            <span>{ruta.data.terrain}</span>
+            <span>{ruta.data.start}</span>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <AdSlot />
+  </div>
+</BaseLayout>

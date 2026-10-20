@@ -3,7 +3,7 @@ import { SITE } from '../data/site';
 
 export const GET: APIRoute = ({ site }) => {
   const base = site ?? new URL(SITE.url);
-  const body = `User-agent: *\nAllow: /\nDisallow: /buscar/\n\nSitemap: ${new URL('/sitemap-index.xml', base)}\n`;
+  const body = `User-agent: *\nAllow: /\nDisallow: /buscar/\nDisallow: /en/buscar/\n\nSitemap: ${new URL('/sitemap-index.xml', base)}\n`;
 
   return new Response(body, {
     headers: {

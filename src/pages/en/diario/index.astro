@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ArchiveList from '../../../components/ArchiveList.astro';
+import { getCollection } from 'astro:content';
+import { sortByDate } from '../../../lib/utils';
+import { t } from '../../../i18n/ui';
+
+const lang = 'en' as const;
+const PAGE_SIZE = 9;
+const articulos = sortByDate(await getCollection('articulosEn'));
+const totalPages = Math.ceil(articulos.length / PAGE_SIZE);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Ruta y Ritmo Journal',
+    description: t(lang, 'diaryDescription'),
+    inLanguage: 'en-US',
+  },
+];
+---
+
+<BaseLayout
+  title="Running journal"
+  description={t(lang, 'diaryDescription')}
+  jsonLd={jsonLd}
+>
+  <ArchiveList
+    articulos={articulos.slice(0, PAGE_SIZE)}
+    currentPage={1}
+    totalPages={totalPages}
+  />
+</BaseLayout>

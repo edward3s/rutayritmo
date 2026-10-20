@@ -1,30 +1,53 @@
 ---
 import { SITE } from '../data/site';
+import {
+  alternateLangPath,
+  getLangFromPath,
+  localizedPath,
+  t,
+} from '../i18n/ui';
 
+const lang = getLangFromPath(Astro.url.pathname);
 const path = Astro.url.pathname;
+const pagePath =
+  lang === 'en' ? path.replace(/^\/en(?=\/|$)/, '') || '/' : path;
+
 const isActive = (href: string) =>
-  href === '/' ? path === '/' : path.startsWith(href);
+  href === '/' ? pagePath === '/' : pagePath.startsWith(href);
 
 const links = [
-  { href: '/diario/', label: 'Diario' },
-  { href: '/rutas/', label: 'Rutas' },
-  { href: '/diario/categoria/entrenamiento/', label: 'Entrenamiento' },
-  { href: '/sobre/', label: 'Sobre' },
-  { href: '/buscar/', label: 'Buscar' },
+  { href: '/diario/', label: t(lang, 'diary') },
+  { href: '/rutas/', label: t(lang, 'routes') },
+  { href: '/diario/categoria/entrenamiento/', label: t(lang, 'training') },
+  { href: '/sobre/', label: t(lang, 'about') },
+  { href: '/buscar/', label: t(lang, 'search') },
 ];
+
+const switchHref = alternateLangPath(path, Astro.url.search);
+const switchLabel = lang === 'es' ? t(lang, 'switchToEnglish') : t(lang, 'switchToSpanish');
+const issue = lang === 'en' ? 'No. 08 / Autumn 2026' : SITE.issue;
 ---
 
 <header class="site-header wrap">
-  <a class="wordmark" href="/" aria-label="Ruta y Ritmo, inicio">RUTA Y RITMO</a>
+  <a class="wordmark" href={localizedPath(lang, '/')} aria-label={`${SITE.name}, ${t(lang, 'home')}`}>RUTA Y RITMO</a>
 
-  <nav class="site-nav" aria-label="Principal">
+  <nav class="site-nav" aria-label={t(lang, 'mainNav')}>
     {links.map((link) => (
       <a
-        href={link.href}
+        href={localizedPath(lang, link.href)}
         aria-current={isActive(link.href) ? 'page' : undefined}
       >{link.label}</a>
     ))}
   </nav>
 
-  <p class="issue">{SITE.issue}</p>
+  <a
+    class="lang-switch"
+    href={switchHref}
+    hreflang={lang === 'es' ? 'en' : 'es'}
+    lang={lang === 'es' ? 'en' : 'es'}
+    aria-label={switchLabel}
+    title={switchLabel}
+  >{lang === 'es' ? 'EN' : 'ES'}</a>
+
+  <p class="issue">{issue}</p>
 </header>

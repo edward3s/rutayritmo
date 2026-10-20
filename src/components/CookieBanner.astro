@@ -1,15 +1,18 @@
 ---
+import { getLangFromPath, localizedPath, t } from '../i18n/ui';
+
+const lang = getLangFromPath(Astro.url.pathname);
 const adsClient = import.meta.env.PUBLIC_ADSENSE_CLIENT;
 ---
 
-<section class="cookie" id="cookie-banner" aria-label="Aviso de cookies" hidden>
+<section class="cookie" id="cookie-banner" aria-label={t(lang, 'cookieAria')} hidden>
   <div class="cookie__inner">
     <p>
-      Cookies: si aceptas, Google AdSense puede usar cookies para anuncios. <a href="/cookies/">Política</a>.
+      {t(lang, 'cookieText')} <a href={localizedPath(lang, '/cookies/')}>{t(lang, 'cookiePolicy')}</a>.
     </p>
     <div class="cookie__actions">
-      <button type="button" class="cookie__reject" id="cookie-reject">Solo necesarias</button>
-      <button type="button" class="cookie__accept" id="cookie-accept">Aceptar anuncios</button>
+      <button type="button" class="cookie__reject" id="cookie-reject">{t(lang, 'cookieReject')}</button>
+      <button type="button" class="cookie__accept" id="cookie-accept">{t(lang, 'cookieAccept')}</button>
     </div>
   </div>
 </section>

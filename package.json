@@ -9,8 +9,9 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "covers": "node scripts/generate-article-covers.mjs",
-    "og": "node scripts/generate-og.mjs"
+    "covers": "node scripts/generate-article-covers.mjs && node scripts/generate-en-assets.mjs",
+    "og": "node scripts/generate-og.mjs && node scripts/generate-en-assets.mjs",
+    "en-assets": "node scripts/generate-en-assets.mjs"
   },
   "engines": {
     "node": ">=22"

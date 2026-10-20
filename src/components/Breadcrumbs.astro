@@ -1,4 +1,6 @@
 ---
+import { getLangFromPath, t } from '../i18n/ui';
+
 interface Item {
   label: string;
   href?: string;
@@ -9,9 +11,10 @@ interface Props {
 }
 
 const { items } = Astro.props;
+const lang = getLangFromPath(Astro.url.pathname);
 ---
 
-<nav class="breadcrumbs" aria-label="Migas de pan">
+<nav class="breadcrumbs" aria-label={t(lang, 'breadcrumbs')}>
   <ol>
     {items.map((item, index) => {
       const isLast = index === items.length - 1;

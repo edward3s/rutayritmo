@@ -4,37 +4,40 @@ import ArticleCard from './ArticleCard.astro';
 import AdSlot from './AdSlot.astro';
 import Pagination from './Pagination.astro';
 import Breadcrumbs from './Breadcrumbs.astro';
-import { CATEGORIA_LIST } from '../data/categorias';
+import { getCategoriaList } from '../data/categorias';
+import { getLangFromPath, localizedPath, t } from '../i18n/ui';
+
+type ArticleEntry = CollectionEntry<'articulos'> | CollectionEntry<'articulosEn'>;
 
 interface Props {
-  articulos: CollectionEntry<'articulos'>[];
+  articulos: ArticleEntry[];
   currentPage: number;
   totalPages: number;
 }
 
 const { articulos, currentPage, totalPages } = Astro.props;
-const pageLabel = currentPage === 1 ? 'Diario' : `Diario, página ${currentPage}`;
+const lang = getLangFromPath(Astro.url.pathname);
+const categorias = getCategoriaList(lang);
+const pageLabel =
+  currentPage === 1 ? t(lang, 'diaryTitle') : `${t(lang, 'diaryPage')} ${currentPage}`;
 ---
 
 <div class="wrap page">
   <Breadcrumbs
     items={[
-      { label: 'Inicio', href: '/' },
+      { label: t(lang, 'home'), href: localizedPath(lang, '/') },
       { label: pageLabel },
     ]}
   />
 
   <header class="page__header">
-    <h1>Diario</h1>
-    <p>
-      Entrenamiento, material, nutrición, salud y carreras. Sin atajos, sin planes
-      milagro y con las fuentes a la vista.
-    </p>
+    <h1>{t(lang, 'diaryTitle')}</h1>
+    <p>{t(lang, 'diaryDescription')}</p>
   </header>
 
-  <nav class="category-nav" aria-label="Categorías del diario">
-    {CATEGORIA_LIST.map((categoria) => (
-      <a href={`/diario/categoria/${categoria.slug}/`}>{categoria.name}</a>
+  <nav class="category-nav" aria-label={t(lang, 'categoriesNav')}>
+    {categorias.map((categoria) => (
+      <a href={localizedPath(lang, `/diario/categoria/${categoria.slug}/`)}>{categoria.name}</a>
     ))}
   </nav>
 
@@ -44,5 +47,9 @@ const pageLabel = currentPage === 1 ? 'Diario' : `Diario, página ${currentPage}
 
   <AdSlot />
 
-  <Pagination currentPage={currentPage} totalPages={totalPages} />
+  <Pagination
+    currentPage={currentPage}
+    totalPages={totalPages}
+    basePath={localizedPath(lang, '/diario/')}
+  />
 </div>

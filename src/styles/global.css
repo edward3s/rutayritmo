@@ -160,6 +160,29 @@ svg {
   white-space: nowrap;
 }
 
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding-inline: 10px;
+  border: 1px solid var(--line-strong);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+
+.lang-switch:hover {
+  color: var(--paper-bright);
+  background: var(--accent-deep);
+  border-color: var(--accent-deep);
+}
+
 /* ---------- Hero ---------- */
 
 .hero {
@@ -1750,9 +1773,16 @@ html[data-consent="essential"] .ad {
   }
 
   .site-nav {
+    order: 3;
+    width: 100%;
     margin-left: 0;
     gap: 16px;
     font-size: 0.88rem;
+  }
+
+  .lang-switch {
+    order: 2;
+    margin-left: auto;
   }
 
   .hero {
@@ -1836,8 +1866,9 @@ html[data-consent="essential"] .ad {
   }
 
   .prose table {
-    display: block;
-    overflow-x: auto;
+    display: table;
+    width: max-content;
+    min-width: 100%;
     white-space: nowrap;
   }
 }

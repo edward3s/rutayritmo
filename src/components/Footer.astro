@@ -1,25 +1,29 @@
 ---
-import { CATEGORIA_LIST } from '../data/categorias';
+import { getCategoriaList } from '../data/categorias';
 import { SITE } from '../data/site';
+import { getLangFromPath, localizedPath, t } from '../i18n/ui';
 
+const lang = getLangFromPath(Astro.url.pathname);
+const categorias = getCategoriaList(lang);
 const year = new Date().getFullYear();
+const link = (path: string) => localizedPath(lang, path);
 ---
 
 <footer class="site-footer">
   <div class="wrap">
     <div class="footer__grid">
       <div class="footer__brand">
-        <a class="wordmark" href="/" aria-label="Ruta y Ritmo, inicio">RUTA Y RITMO</a>
-        <p>{SITE.description}</p>
+        <a class="wordmark" href={link('/')} aria-label={`${SITE.name}, ${t(lang, 'home')}`}>RUTA Y RITMO</a>
+        <p>{t(lang, 'homeLede')}</p>
       </div>
 
       <div class="footer__col">
-        <h2>Secciones</h2>
+        <h2>{t(lang, 'sections')}</h2>
         <ul>
-          <li><a href="/diario/">Diario</a></li>
-          <li><a href="/rutas/">Rutas</a></li>
-          {CATEGORIA_LIST.map((categoria) => (
-            <li><a href={`/diario/categoria/${categoria.slug}/`}>{categoria.name}</a></li>
+          <li><a href={link('/diario/')}>{t(lang, 'diary')}</a></li>
+          <li><a href={link('/rutas/')}>{t(lang, 'routes')}</a></li>
+          {categorias.map((categoria) => (
+            <li><a href={link(`/diario/categoria/${categoria.slug}/`)}>{categoria.name}</a></li>
           ))}
         </ul>
       </div>
@@ -27,27 +31,27 @@ const year = new Date().getFullYear();
       <div class="footer__col">
         <h2>Ruta y Ritmo</h2>
         <ul>
-          <li><a href="/sobre/">Sobre el blog</a></li>
-          <li><a href="/autor/eduard/">Autor</a></li>
-          <li><a href="/politica-editorial/">Política editorial</a></li>
+          <li><a href={link('/sobre/')}>{t(lang, 'aboutBlog')}</a></li>
+          <li><a href={link('/autor/eduard/')}>{t(lang, 'author')}</a></li>
+          <li><a href={link('/politica-editorial/')}>{t(lang, 'editorialPolicy')}</a></li>
         </ul>
       </div>
 
       <div class="footer__col">
-        <h2>Legal</h2>
+        <h2>{t(lang, 'legal')}</h2>
         <ul>
-          <li><a href="/privacidad/">Privacidad</a></li>
-          <li><a href="/cookies/">Cookies</a></li>
-          <li><a href="/aviso-legal/">Aviso legal</a></li>
-          <li><a href="/afiliados/">Afiliados</a></li>
-          <li><a href="/rss.xml">RSS</a></li>
+          <li><a href={link('/privacidad/')}>{t(lang, 'privacy')}</a></li>
+          <li><a href={link('/cookies/')}>{t(lang, 'cookies')}</a></li>
+          <li><a href={link('/aviso-legal/')}>{t(lang, 'legalNotice')}</a></li>
+          <li><a href={link('/afiliados/')}>{t(lang, 'affiliates')}</a></li>
+          <li><a href={link('/rss.xml')}>RSS</a></li>
         </ul>
       </div>
     </div>
 
     <div class="footer__bottom">
-      <p>© {year} Ruta y Ritmo. Un diario de running.</p>
-      <p>Sin planes milagro. <a href="/rss.xml">Suscripción RSS</a></p>
+      <p>© {year} Ruta y Ritmo. {t(lang, 'footerTagline')}</p>
+      <p>{t(lang, 'footerNoMiracle')} <a href={link('/rss.xml')}>{t(lang, 'rss')}</a></p>
     </div>
   </div>
 </footer>

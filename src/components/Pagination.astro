@@ -1,22 +1,26 @@
 ---
+import { getLangFromPath, localizedPath, t } from '../i18n/ui';
+
 interface Props {
   currentPage: number;
   totalPages: number;
   basePath?: string;
 }
 
-const { currentPage, totalPages, basePath = '/diario/' } = Astro.props;
+const { currentPage, totalPages } = Astro.props;
+const lang = getLangFromPath(Astro.url.pathname);
+const basePath = Astro.props.basePath ?? localizedPath(lang, '/diario/');
 
 const urlFor = (page: number) =>
   page === 1 ? basePath : `${basePath}pagina/${page}/`;
 ---
 
-<nav class="pagination" aria-label="Paginación">
+<nav class="pagination" aria-label={t(lang, 'pagination')}>
   <div>
     {currentPage > 1 ? (
-      <a href={urlFor(currentPage - 1)}>Anterior</a>
+      <a href={urlFor(currentPage - 1)}>{t(lang, 'previous')}</a>
     ) : (
-      <span class="disabled">Anterior</span>
+      <span class="disabled">{t(lang, 'previous')}</span>
     )}
   </div>
 
@@ -26,7 +30,7 @@ const urlFor = (page: number) =>
         {page === currentPage ? (
           <span aria-current="page">{page}</span>
         ) : (
-          <a href={urlFor(page)} aria-label={`Página ${page}`}>{page}</a>
+          <a href={urlFor(page)} aria-label={`${t(lang, 'page')} ${page}`}>{page}</a>
         )}
       </li>
     ))}
@@ -34,9 +38,9 @@ const urlFor = (page: number) =>
 
   <div>
     {currentPage < totalPages ? (
-      <a href={urlFor(currentPage + 1)}>Siguiente</a>
+      <a href={urlFor(currentPage + 1)}>{t(lang, 'next')}</a>
     ) : (
-      <span class="disabled">Siguiente</span>
+      <span class="disabled">{t(lang, 'next')}</span>
     )}
   </div>
 </nav>

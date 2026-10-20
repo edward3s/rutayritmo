@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import ArticleCard from '../../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+import { AUTOR } from '../../../data/autor';
+import { SITE } from '../../../data/site';
+import { sortByDate } from '../../../lib/utils';
+import { t } from '../../../i18n/ui';
+
+export function getStaticPaths() {
+  return [{ params: { slug: AUTOR.slug } }];
+}
+
+const lang = 'en' as const;
+const articulos = sortByDate(await getCollection('articulosEn'));
+const site = Astro.site ?? new URL(SITE.url);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: AUTOR.name,
+  jobTitle: 'Author',
+  url: new URL(`/en/autor/${AUTOR.slug}/`, site).toString(),
+};
+---
+
+<BaseLayout
+  title={`${AUTOR.name}, ${t(lang, 'authorPageTitle')}`}
+  description={`${t(lang, 'authorDescription')} ${AUTOR.name} on Ruta y Ritmo.`}
+  jsonLd={[jsonLd]}
+>
+  <div class="wrap page">
+    <Breadcrumbs
+      items={[
+        { label: t(lang, 'home'), href: '/en/' },
+        { label: t(lang, 'author'), href: '/en/sobre/' },
+        { label: AUTOR.name },
+      ]}
+    />
+
+    <header class="page__header">
+      <div class="article-kicker">
+        <span class="category-tag" style="--cat: var(--primary)">{t(lang, 'author')}</span>
+        <span>{articulos.length} {t(lang, 'authorArticles')}</span>
+      </div>
+      <h1>{AUTOR.name}</h1>
+    </header>
+
+    <section class="section" aria-labelledby="articulos-autor">
+      <div class="section-head">
+        <h2 id="articulos-autor">{t(lang, 'authorArticlesTitle')} {AUTOR.name}</h2>
+        <p>{t(lang, 'authorArticlesBody')}</p>
+      </div>
+
+      <div class="card-grid">
+        {articulos.map((entry) => <ArticleCard entry={entry} />)}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,206 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import RouteProfile from '../../../components/RouteProfile.astro';
+import AdSlot from '../../../components/AdSlot.astro';
+import { AUTOR } from '../../../data/autor';
+import { SITE } from '../../../data/site';
+import { formatDate } from '../../../lib/utils';
+import { difficultyLabel, t } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const rutas = await getCollection('rutasEn');
+  return rutas.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props as { entry: CollectionEntry<'rutasEn'> };
+const { Content, headings } = await render(entry);
+const lang = 'en' as const;
+const site = Astro.site ?? new URL(SITE.url);
+const url = `/en/rutas/${entry.id}/`;
+const canonical = new URL(url, site).toString();
+const updated = entry.data.updatedAt ?? entry.data.publishedAt;
+const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: entry.data.title,
+    description: entry.data.description,
+    datePublished: entry.data.publishedAt.toISOString(),
+    dateModified: updated.toISOString(),
+    author: {
+      '@type': 'Person',
+      name: AUTOR.name,
+      url: new URL(`/en/autor/${AUTOR.slug}/`, site).toString(),
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE.name,
+      url: site.toString(),
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    image: [new URL('/og-default.png', site).toString()],
+    articleSection: 'Routes',
+    about: {
+      '@type': 'Place',
+      name: entry.data.start,
+    },
+    inLanguage: 'en-US',
+    isAccessibleForFree: true,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t(lang, 'home'), item: new URL('/en/', site).toString() },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: t(lang, 'routeSection'),
+        item: new URL('/en/rutas/', site).toString(),
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: entry.data.title,
+        item: canonical,
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={`${entry.data.title} — Route`}
+  description={entry.data.description}
+  type="article"
+  publishedTime={entry.data.publishedAt.toISOString()}
+  modifiedTime={updated.toISOString()}
+  section="Routes"
+  jsonLd={jsonLd}
+>
+  <div class="wrap">
+    <Breadcrumbs
+      items={[
+        { label: t(lang, 'home'), href: '/en/' },
+        { label: t(lang, 'routeSection'), href: '/en/rutas/' },
+        { label: entry.data.title },
+      ]}
+    />
+
+    <header class="article-header">
+      <div class="article-kicker">
+        <span class="category-tag" style="--cat: var(--primary)">{t(lang, 'routeLabel')}</span>
+        <span>{entry.data.distanceKm} km</span>
+        <span>{difficultyLabel(lang, entry.data.difficulty)}</span>
+      </div>
+      <h1 class="article-title">{entry.data.title}</h1>
+      <p class="article-dek">{entry.data.description}</p>
+      <div class="article-byline">
+        <span>{t(lang, 'routeSheetBy')} <a href={`/en/autor/${AUTOR.slug}/`}>{AUTOR.name}</a></span>
+        <time datetime={entry.data.publishedAt.toISOString()}>
+          {formatDate(entry.data.publishedAt, 'long', lang)}
+        </time>
+        {entry.data.updatedAt && (
+          <span>{t(lang, 'routeUpdatedOn')} {formatDate(entry.data.updatedAt, 'long', lang)}</span>
+        )}
+      </div>
+    </header>
+
+    <dl class="route-facts">
+      <div class="route-fact">
+        <dt>{t(lang, 'routeFactDistance')}</dt>
+        <dd>{entry.data.distanceKm} km</dd>
+      </div>
+      <div class="route-fact">
+        <dt>{t(lang, 'routeFactElevation')}</dt>
+        <dd>+{entry.data.elevationGain} m</dd>
+      </div>
+      <div class="route-fact">
+        <dt>{t(lang, 'routeFactDuration')}</dt>
+        <dd>{entry.data.duration}</dd>
+      </div>
+      <div class="route-fact">
+        <dt>{t(lang, 'routeFactTerrain')}</dt>
+        <dd>{entry.data.terrain}</dd>
+      </div>
+      <div class="route-fact">
+        <dt>{t(lang, 'routeFactDifficulty')}</dt>
+        <dd>{difficultyLabel(lang, entry.data.difficulty)}</dd>
+      </div>
+      <div class="route-fact">
+        <dt>{t(lang, 'routeFactStart')}</dt>
+        <dd>{entry.data.start}</dd>
+      </div>
+    </dl>
+
+    <div class="route-profile">
+      <RouteProfile profile={entry.data.profile} />
+      <div class="route-profile__labels">
+        <span>0 km</span>
+        <span>{Math.round(entry.data.distanceKm / 2)} km</span>
+        <span>{entry.data.distanceKm} km</span>
+      </div>
+    </div>
+
+    <AdSlot />
+
+    <div class="article-layout">
+      <aside class="article-aside">
+        {toc.length > 1 && (
+          <nav class="toc" aria-label={t(lang, 'inThisRoute')}>
+            <p class="toc__title">{t(lang, 'inThisRoute')}</p>
+            <ol>
+              {toc.map((heading) => (
+                <li data-depth={heading.depth}>
+                  <a href={`#${heading.slug}`}>{heading.text}</a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )}
+
+        <div class="author-mini">
+          <span class="avatar" aria-hidden="true">{AUTOR.name.slice(0, 1)}</span>
+          <div>
+            <p class="author-mini__name"><a href={`/en/autor/${AUTOR.slug}/`}>{AUTOR.name}</a></p>
+            <p class="author-mini__role">{t(lang, 'routeLabel')}</p>
+          </div>
+        </div>
+      </aside>
+
+      <div class="article-body">
+        <div class="prose">
+          <p class="lead"><strong>{t(lang, 'routeWater')}</strong> {entry.data.water}</p>
+          <Content />
+        </div>
+
+        {entry.data.sources.length > 0 && (
+          <section class="sources" aria-labelledby="fuentes-title">
+            <h2 id="fuentes-title">{t(lang, 'routeSources')}</h2>
+            <ul>
+              {entry.data.sources.map((source) => (
+                <li>
+                  <a href={source.url} target="_blank" rel="noopener noreferrer">
+                    {source.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <aside class="medical-note">
+          <strong>{t(lang, 'routeSafetyTitle')}</strong> {t(lang, 'routeSafetyBody')}
+        </aside>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

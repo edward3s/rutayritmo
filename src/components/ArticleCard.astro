@@ -1,21 +1,27 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { CATEGORIAS } from '../data/categorias';
+import { getCategoria } from '../data/categorias';
 import { formatDate, readingTime } from '../lib/utils';
+import { getLangFromPath, localizedPath, t } from '../i18n/ui';
+
+type ArticleEntry = CollectionEntry<'articulos'> | CollectionEntry<'articulosEn'>;
 
 interface Props {
-  entry: CollectionEntry<'articulos'>;
+  entry: ArticleEntry;
 }
 
 const { entry } = Astro.props;
-const categoria = CATEGORIAS[entry.data.category];
-const url = `/diario/${entry.id}/`;
+const lang = getLangFromPath(Astro.url.pathname);
+const categoria = getCategoria(entry.data.category, lang);
+const url = localizedPath(lang, `/diario/${entry.id}/`);
+const artPath =
+  lang === 'en' ? `/images/articles/en/${entry.id}.svg` : `/images/articles/${entry.id}.svg`;
 ---
 
 <article class="article-card">
   <div class="article-card__art" aria-hidden="true">
     <img
-      src={`/images/articles/${entry.id}.svg`}
+      src={artPath}
       width="1200"
       height="675"
       loading="lazy"
@@ -26,7 +32,7 @@ const url = `/diario/${entry.id}/`;
 
   <a
     class="category-tag"
-    href={`/diario/categoria/${categoria.slug}/`}
+    href={localizedPath(lang, `/diario/categoria/${categoria.slug}/`)}
     style={`--cat:${categoria.tone}`}
   >{categoria.name}</a>
 
@@ -37,7 +43,7 @@ const url = `/diario/${entry.id}/`;
   <p class="article-card__excerpt">{entry.data.description}</p>
 
   <div class="article-card__foot">
-    <time datetime={entry.data.publishedAt.toISOString()}>{formatDate(entry.data.publishedAt)}</time>
-    <span>{readingTime(entry.body)} min de lectura</span>
+    <time datetime={entry.data.publishedAt.toISOString()}>{formatDate(entry.data.publishedAt, 'short', lang)}</time>
+    <span>{readingTime(entry.body)} {t(lang, 'readMinutes')}</span>
   </div>
 </article>
