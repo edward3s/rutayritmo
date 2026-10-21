@@ -1690,17 +1690,7 @@ html[data-consent="essential"] .ad {
   }
 }
 
-@media (max-width: 960px) {
-  .hero {
-    grid-template-columns: 1fr;
-  }
-
-  .bib {
-    margin-top: 20px;
-    justify-self: start;
-    width: min(100%, 340px);
-  }
-
+@media (max-width: 1100px) {
   .feature {
     grid-template-columns: 1fr;
   }
@@ -1711,6 +1701,18 @@ html[data-consent="essential"] .ad {
     min-height: 0;
     border-right: 0;
     border-bottom: 2px solid var(--ink);
+  }
+}
+
+@media (max-width: 960px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .bib {
+    margin-top: 20px;
+    justify-self: start;
+    width: min(100%, 340px);
   }
 
   .card-grid {
