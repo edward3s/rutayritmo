@@ -64,13 +64,13 @@ function cover([slug, category, label, kind]) {
   <rect width="1200" height="675" fill="${colors.paper}"/>
   <path d="M0 0h1200v105H0z" fill="${colors.paperDeep}"/>
   <path d="M0 105h1200" stroke="${colors.ink}" stroke-opacity=".22" stroke-width="2"/>
-  <text x="88" y="69" fill="${colors.ink}" font-family="Arial, sans-serif" font-size="30" font-weight="700" letter-spacing="3">RUTA Y RITMO</text>
-  <text x="1112" y="68" text-anchor="end" fill="${colors.petrol}" font-family="Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="2">${categoryNames[category].toUpperCase()}</text>
+  <text x="180" y="69" fill="${colors.ink}" font-family="Arial, sans-serif" font-size="30" font-weight="700" letter-spacing="3">RUTA Y RITMO</text>
+  <text x="1020" y="68" text-anchor="end" fill="${colors.petrol}" font-family="Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="2">${categoryNames[category].toUpperCase()}</text>
   <path d="M0 565c160-20 248-45 376-27 142 20 213 57 360 46 159-12 276-53 464-34v125H0Z" fill="${colors.paperDeep}"/>
   <path d="M0 602c223-35 367 19 548 3 204-18 344-62 652-28" fill="none" stroke="${colors.petrolLight}" stroke-opacity=".3" stroke-width="3"/>
   <g>${art}</g>
-  <path d="M88 620h104" stroke="${colors.orange}" stroke-width="10" stroke-linecap="square"/>
-  <text x="214" y="630" fill="${colors.muted}" font-family="Arial, sans-serif" font-size="19" letter-spacing="1">${label.toUpperCase()}</text>
+  <path d="M180 620h104" stroke="${colors.orange}" stroke-width="10" stroke-linecap="square"/>
+  <text x="306" y="630" fill="${colors.muted}" font-family="Arial, sans-serif" font-size="19" letter-spacing="1">${label.toUpperCase()}</text>
 </svg>`;
 }
 
